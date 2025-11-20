@@ -139,3 +139,29 @@ def extract_markdown_links(text):
         nodes.append(TextNode(remaining_text, TextType.TEXT))
 
     return nodes
+def split_nodes_image(old_nodes):
+    new_nodes = []
+    for node in old_nodes:
+        # only attempt to extract images from plain text nodes
+        if node.text_type != TextType.TEXT:
+            new_nodes.append(node)
+            continue
+
+        extracted_nodes = extract_markdown_images(node.text)
+        new_nodes.extend(extracted_nodes)
+
+    return new_nodes
+def split_nodes_link(old_nodes):
+    new_nodes = []
+    for node in old_nodes:
+        # only attempt to extract links from plain text nodes
+        if node.text_type != TextType.TEXT:
+            new_nodes.append(node)
+            continue
+
+        extracted_nodes = extract_markdown_links(node.text)
+        new_nodes.extend(extracted_nodes)
+
+    return new_nodes
+def text_to_textnodes(text):
+    return [TextNode(text, TextType.TEXT)]
